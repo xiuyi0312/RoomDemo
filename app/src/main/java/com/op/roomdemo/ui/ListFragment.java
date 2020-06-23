@@ -21,6 +21,7 @@ import com.op.roomdemo.databinding.ListFragmentBinding;
 import com.op.roomdemo.ui.adapter.UserAdapter;
 import com.op.roomdemo.ui.callback.OnItemClickListener;
 import com.op.roomdemo.viewmodel.UserViewModel;
+import com.op.roomdemo.widget.AlertDialogFragment;
 
 import java.util.List;
 
@@ -61,6 +62,11 @@ public class ListFragment extends Fragment {
                 bundle.putParcelable("User", u);
                 Navigation.findNavController(binding.rvUser).navigate(R.id.action_edit, bundle);
             }
+
+            @Override
+            public void onItemLongClick(User u) {
+                showDeleteDialog(u);
+            }
         });
         binding.rvUser.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.rvUser.setItemAnimator(new DefaultItemAnimator());
@@ -73,5 +79,21 @@ public class ListFragment extends Fragment {
             }
         });
 
+    }
+
+    private void showDeleteDialog(final User user) {
+        AlertDialogFragment fragment = new AlertDialogFragment.Builder()
+                .setCancelable(true)
+                .setContent("是否删除该联系人")
+                .setPositiveClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        userViewModel.deleteUser(user);
+                    }
+                })
+                .setTitle("请确认")
+                .setPositiveText("确定")
+                .build();
+        fragment.show(getChildFragmentManager(), "delete_fragment");
     }
 }

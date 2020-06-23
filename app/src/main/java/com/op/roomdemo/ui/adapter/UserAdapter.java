@@ -66,6 +66,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH> {
                         onItemClickListener.onItemClick(userList.get(pos));
                     }
                 });
+                binding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        onItemClickListener.onItemLongClick(userList.get(pos));
+                        return true;
+                    }
+                });
             }
         }
     }
