@@ -58,14 +58,7 @@ public class DetailFragment extends Fragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editUser != null) {
-                    editUser.setName(editViewModel.liveName.getValue());
-                    editUser.setAge(Integer.valueOf(editViewModel.liveAge.getValue()));
-                    userViewModel.updateUser(editUser);
-                } else {
-                    userViewModel.addUser(editViewModel.liveName.getValue(),
-                            Integer.valueOf(editViewModel.liveAge.getValue()));
-                }
+                userViewModel.addOrUpdateUser(editViewModel.saveUser());
                 Navigation.findNavController(binding.btnSave).navigateUp();
             }
         });

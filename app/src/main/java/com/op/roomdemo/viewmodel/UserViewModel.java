@@ -40,4 +40,16 @@ public class UserViewModel extends AndroidViewModel {
     public void addUser(String name, int age) {
         userRepository.insert(new User(name, age));
     }
+
+    public void addUser(User user) {
+        userRepository.insert(user);
+    }
+
+    public void addOrUpdateUser(User user) {
+        if (user.getId() == 0) {
+            addUser(user);
+        } else {
+            updateUser(user);
+        }
+    }
 }
