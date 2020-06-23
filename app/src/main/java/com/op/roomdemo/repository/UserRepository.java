@@ -32,7 +32,6 @@ public class UserRepository {
     }
 
     public void insert(final User... users) {
-        // TODO: 2020/6/23 operate db asynchronously
         dbOperationExecutor.submit(new Runnable() {
             @Override
             public void run() {
@@ -41,11 +40,21 @@ public class UserRepository {
         });
     }
 
-    public void delete(User... users) {
-
+    public void delete(final User... users) {
+        dbOperationExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                userDao.delete(users);
+            }
+        });
     }
 
-    public void update(User... users) {
-
+    public void update(final User... users) {
+        dbOperationExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                userDao.update(users);
+            }
+        });
     }
 }

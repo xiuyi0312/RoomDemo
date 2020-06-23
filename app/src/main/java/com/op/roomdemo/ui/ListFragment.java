@@ -19,6 +19,7 @@ import com.op.roomdemo.R;
 import com.op.roomdemo.bean.User;
 import com.op.roomdemo.databinding.ListFragmentBinding;
 import com.op.roomdemo.ui.adapter.UserAdapter;
+import com.op.roomdemo.ui.callback.OnItemClickListener;
 import com.op.roomdemo.viewmodel.UserViewModel;
 
 import java.util.List;
@@ -53,6 +54,14 @@ public class ListFragment extends Fragment {
             }
         });
         userAdapter = new UserAdapter(requireActivity());
+        userAdapter.setOnItemClickListener(new OnItemClickListener<User>() {
+            @Override
+            public void onItemClick(User u) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("User", u);
+                Navigation.findNavController(binding.rvUser).navigate(R.id.action_edit, bundle);
+            }
+        });
         binding.rvUser.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.rvUser.setItemAnimator(new DefaultItemAnimator());
         binding.rvUser.setAdapter(userAdapter);

@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="com.op.roomdemo.bean.User" />
+        <variable
+            name="user"
+            type="User" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:text="@{String.valueOf(user.id)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:text="@{user.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv"
             app:layout_constraintTop_toTopOf="@id/iv"
@@ -46,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:text="@{String.valueOf(user.age)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv"
             app:layout_constraintTop_toBottomOf="@id/tv_name"

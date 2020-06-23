@@ -1,5 +1,6 @@
 package com.op.roomdemo.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.op.roomdemo.R;
+import com.op.roomdemo.bean.User;
 import com.op.roomdemo.databinding.DetailFragmentBinding;
 import com.op.roomdemo.viewmodel.EditViewModel;
 import com.op.roomdemo.viewmodel.UserViewModel;
@@ -23,12 +25,23 @@ public class DetailFragment extends Fragment {
 
     private UserViewModel userViewModel;
     private EditViewModel editViewModel;
+    private User editUser;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Bundle arguments = getArguments();
+        if(arguments != null) {
+            editUser = arguments.getParcelable("User");
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         editViewModel = new ViewModelProvider(this).get(EditViewModel.class);
+        editViewModel.setUser(editUser);
     }
 
     @Nullable
@@ -45,9 +58,14 @@ public class DetailFragment extends Fragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2020/6/23 save the new user and then popup
-                userViewModel.addUser(editViewModel.liveName.getValue(), Integer.valueOf(
-                        editViewModel.liveAge.getValue()));
+                if (editUser != null) {
+                    editUser.setName(editViewModel.liveName.getValue());
+                    editUser.setAge(Integer.valueOf(editViewModel.liveAge.getValue()));
+                    userViewModel.updateUser(editUser);
+                } else {
+                    userViewModel.addUser(editViewModel.liveName.getValue(),
+                            Integer.valueOf(editViewModel.liveAge.getValue()));
+                }
                 Navigation.findNavController(binding.btnSave).navigateUp();
             }
         });

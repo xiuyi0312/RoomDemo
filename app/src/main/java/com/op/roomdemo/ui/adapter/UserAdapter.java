@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.op.roomdemo.R;
 import com.op.roomdemo.bean.User;
 import com.op.roomdemo.databinding.ItemUserBinding;
+import com.op.roomdemo.ui.callback.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH> {
 
     private List<User> userList;
     private Context context;
+    private OnItemClickListener<User> onItemClickListener;
 
     public UserAdapter(Context context, List<User> userList) {
         this.context = context;
@@ -29,6 +30,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH> {
 
     public UserAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener<User> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public void updateUsers(List<User> users) {
@@ -43,19 +48,25 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH> {
     @NonNull
     @Override
     public UserVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // TODO: 2020/6/23 the variable is layout and item type and can be extracted to an abstract class
         return new UserVH(DataBindingUtil.inflate(LayoutInflater.from(context),
                 R.layout.item_user, parent, false).getRoot());
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserVH holder, int position) {
-        int pos = holder.getAdapterPosition();
+        final int pos = holder.getAdapterPosition();
         if(pos != RecyclerView.NO_POSITION) {
-            // TODO: 2020/6/23 change to databinding in xml file
             ItemUserBinding binding = DataBindingUtil.getBinding(holder.itemView);
-            binding.tvAge.setText(String.valueOf(userList.get(pos).getAge()));
-            binding.tvName.setText(userList.get(pos).getName());
-            binding.tvNo.setText(String.valueOf(userList.get(pos).getId()));
+            binding.setUser(userList.get(pos));
+            if(onItemClickListener != null) {
+                binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemClickListener.onItemClick(userList.get(pos));
+                    }
+                });
+            }
         }
     }
 
@@ -69,4 +80,5 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH> {
             super(itemView);
         }
     }
+
 }
